@@ -2,15 +2,17 @@ import express from "express";
 import mongoose from "mongoose";
 import Middlewares from "./middleware/appMiddlewares";
 import morgan from "morgan";
+import { userRouters } from "./routers/index.routes";
 
 const middlewares = new Middlewares();
 export default class Application {
   private app = express();
 
   constructor(PORT: number, URI: string) {
-    this.app.use((morgan("dev")), express.json());
+    this.app.use(morgan("dev"), express.json());
     this.serverConnection(PORT);
     this.databaseConnection(URI);
+    this.defineRoutes();
     this.app.use(middlewares.appErrorHandler(), middlewares.noPageFound());
   }
 
@@ -29,5 +31,9 @@ export default class Application {
       .catch((err) => {
         console.log(`Error occured ${err}`);
       });
+  }
+
+  defineRoutes() {
+    return this.app.use(userRouters);
   }
 }
