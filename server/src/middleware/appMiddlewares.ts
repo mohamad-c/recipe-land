@@ -1,30 +1,65 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 import { ResponseModel } from "../utils/interfaces";
+import { validationResult } from "express-validator";
 
 export default class Middlewares {
-  noPageFound(){
-    return (req: Request, res: Response<ResponseModel<any>>, next: NextFunction) => {
+  noPageFound() {
+    return (
+      req: Request,
+      res: Response<ResponseModel<any>>,
+      next: NextFunction
+    ) => {
       res.status(404).json({
         error: true,
         statusCode: 404,
         message: "route not found",
-        data: []
-      })
+        data: [],
+      });
 
       next();
-    }
+    };
   }
 
-  appErrorHandler(){
-    return (error: any, req: Request, res: Response<ResponseModel<any>>, next: NextFunction) => {
-      if(error){
+  appErrorHandler() {
+    return (
+      error: any,
+      req: Request,
+      res: Response<ResponseModel<any>>,
+      next: NextFunction
+    ) => {
+      if (error) {
         res.status(500).json({
           error: true,
           statusCode: error.status ?? 500,
           message: error.message ?? "route not found",
-          data: []
-        })
-      } else next()
-    }
+          data: [],
+        });
+      } else next();
+    };
   }
-};
+
+  registerValidatorResult() {
+    return (
+      req: Request,
+      res: Response<ResponseModel<any>>,
+      next: NextFunction
+    ) => {
+      const error = validationResult(req);
+      let errArr: any[] = [];
+      error.array().forEach((val) => {
+        errArr.push(val);
+      });
+      if (error.isEmpty() && errArr.length === 0) {
+        next();
+      } else {
+        res.status(400).json({
+          error: true,
+          statusCode: 400,
+          message: "Validation failed",
+          data: [],
+          errorArray: errArr,
+        });
+      }
+    };
+  }
+}
