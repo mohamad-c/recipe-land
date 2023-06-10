@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import Middlewares from "./middleware/appMiddlewares";
 import morgan from "morgan";
 import { userRouters } from "./routers/index.routes";
+import cors from "cors";
 
 const middlewares = new Middlewares();
 export default class Application {
@@ -12,6 +13,7 @@ export default class Application {
     this.app.use(morgan("dev"), express.json());
     this.serverConnection(PORT);
     this.databaseConnection(URI);
+    this.app.use(cors());
     this.defineRoutes();
     this.app.use(middlewares.appErrorHandler(), middlewares.noPageFound());
   }
