@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { RegisterBodyProps, ResponseModel } from "../utils/interfaces";
 import { userModel } from "../model/user.model";
+import EncryptionModule from "../module/encryption.module";
 
+const encryption = new EncryptionModule()
 export default class UserController {
   async registerUser(
     req: Request,
@@ -15,15 +17,13 @@ export default class UserController {
         username,
         phoneNumber,
         password,
-        confirmPassword,
       } = req.body as RegisterBodyProps;
       const registeredUser = await userModel.create({
         fullName,
         email,
         username,
         phoneNumber,
-        password,
-        confirmPassword,
+        password: encryption.encryptPassword(password),
       });
       res.status(201).json({
         error: false,
