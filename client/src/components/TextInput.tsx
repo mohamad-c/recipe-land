@@ -4,19 +4,36 @@ interface TextInputProps {
   label: string;
   model: any;
   id: string;
+  name: string;
+  error?: boolean;
+  errorMessage?: React.ReactNode | undefined;
 }
 
 export default function TextInput({
   label,
   model,
   id,
+  name,
+  error,
+  errorMessage
 }: TextInputProps): JSX.Element {
   const [value, setValue] = useState<string>();
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     model[id] = e.target.value;
   };
-  console.log(model);
+  const inputClassName = [
+    "border",
+    "border-solid",
+    "border-stone-200",
+    "rounded-lg",
+    "py-2",
+    "px-5",
+    "focus:outline-zinc-400",
+    "font-Roboto-Condensed",
+    "font-medium",
+  ];
+
   return (
     <div className="flex flex-col">
       <label
@@ -29,8 +46,12 @@ export default function TextInput({
         onChange={inputHandler}
         id={id}
         value={value}
-        className="border border-solid border-stone-200 rounded-lg mb-3 py-2 px-5 focus:outline-zinc-400 font-Roboto-Condensed font-medium"
+        name={name}
+        className={
+          error ? `${inputClassName.join(" ")} border-2 border-rose-500 bg-rose-50 focus:outline-rose-600`: inputClassName.join(" ")
+        }
       />
+      <p className="text-xs font-Roboto-Condensed mb-3 pt-1 text-rose-800 font-semibold">{errorMessage}</p>
     </div>
   );
 }
