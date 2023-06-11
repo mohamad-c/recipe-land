@@ -4,7 +4,7 @@ export default function Button({
   variant,
 }: {
   title: string;
-  onClick: () => void;
+  onClick?: () => void;
   variant: "success" | "error" | "warning" | "primary";
 }): JSX.Element {
   let className = [];
@@ -15,10 +15,10 @@ export default function Button({
     "hover:bg-emerald-200",
   ];
   const errorClassName = [
-    "bg-red-100",
-    "border-red-600",
-    "text-red-700",
-    "hover:bg-red-200",
+    "bg-rose-100",
+    "border-rose-600",
+    "text-rose-700",
+    "hover:bg-rose-200",
   ];
   const warningClassName = [
     "bg-orange-100",
@@ -51,6 +51,7 @@ export default function Button({
   }
   return (
     <button
+      type="submit"
       onClick={onClick}
       className={`outline-none rounded-lg border font-Roboto-Condensed text-md font-semibold w-full py-2 mt-3 ${className.join(
         " "
