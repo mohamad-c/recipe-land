@@ -15,7 +15,7 @@ export default function TextInput({
   id,
   name,
   error,
-  errorMessage
+  errorMessage,
 }: TextInputProps): JSX.Element {
   const [value, setValue] = useState<string>();
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,14 +25,14 @@ export default function TextInput({
   const inputClassName = [
     "border",
     "border-solid",
-    "border-stone-200",
     "rounded-lg",
     "py-2",
     "px-5",
-    "focus:outline-zinc-400",
     "font-Roboto-Condensed",
     "font-medium",
   ];
+
+  const plainInputClassName = ["border-stone-200", "focus:outline-zinc-400"];
 
   return (
     <div className="flex flex-col">
@@ -48,10 +48,16 @@ export default function TextInput({
         value={value}
         name={name}
         className={
-          error ? `${inputClassName.join(" ")} border-2 border-rose-500 bg-rose-50 focus:outline-rose-600`: inputClassName.join(" ")
+          error
+            ? `${inputClassName.join(
+                " "
+              )} border-2 border-rose-500 bg-rose-50 focus:outline-rose-600`
+            : `${inputClassName.join(" ")} ${plainInputClassName.join(" ")}`
         }
       />
-      <p className="text-xs font-Roboto-Condensed mb-3 pt-1 text-rose-800 font-semibold">{errorMessage}</p>
+      <p className="text-xs font-Roboto-Condensed mb-3 pt-1 text-rose-800 font-semibold">
+        {errorMessage}
+      </p>
     </div>
   );
 }
