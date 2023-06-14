@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import TextInput from "../../components/TextInput";
@@ -58,7 +59,16 @@ export default function RegisterPage(): JSX.Element {
     <div className="container flex justify-between items-center h-screen my-10">
       <Card
         title="Create an account"
+        footerTitle="Already have an account?"
         description="Enter your info below to create your account"
+        cardFooter={
+          <Link
+            to="/login"
+            className="font-medium text-sm pb-10 text-blue-500 font-poppins hover:underline"
+          >
+            Login
+          </Link>
+        }
       >
         <Formik
           initialValues={userModel}
@@ -134,14 +144,16 @@ export default function RegisterPage(): JSX.Element {
                 id="confirmPassword"
                 name="confirmPassword"
                 label="Confirm Password"
-                error={Boolean(errors.confirmPassword && touched.confirmPassword)}
+                error={Boolean(
+                  errors.confirmPassword && touched.confirmPassword
+                )}
                 errorMessage={
                   errors.confirmPassword && touched.confirmPassword ? (
                     <div>{errors.confirmPassword}</div>
                   ) : null
                 }
               />
-              <Button variant="success" title="submit" />
+              <Button variant="success" title="Register" />
             </Form>
           )}
         </Formik>

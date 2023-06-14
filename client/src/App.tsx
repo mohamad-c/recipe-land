@@ -5,13 +5,15 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import RegisterPage from "./pages/Register";
+import LoginPage from "./pages/Loign";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      // <Route path="/" element={}>
-      <Route path="/register" element={<RegisterPage />} />
-      // </Route>
+      <Route path="/">
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
     )
   );
 
