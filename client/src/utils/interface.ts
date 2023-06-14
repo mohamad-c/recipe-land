@@ -6,3 +6,8 @@ export interface UserModel {
   password: string;
   confirmPassword: string;
 }
+
+export interface UserModelLogin {
+  username: string;
+  password: string;
+}
