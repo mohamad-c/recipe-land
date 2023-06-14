@@ -59,4 +59,15 @@ export default class UserValidation {
         }),
     ];
   }
+  loginValidator() {
+    return [
+      body("username")
+        .notEmpty()
+        .withMessage("This field shouldn't be empty"),
+      body("password")
+        .notEmpty()
+        .withMessage("This field shouldn't be empty")
+        
+    ];
+  }
 }
