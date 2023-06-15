@@ -45,11 +45,11 @@ export default class Middlewares {
       next: NextFunction
     ) => {
       const error = validationResult(req);
-      let errArr: any[] = [];
-      error.array().forEach((val) => {
-        errArr.push(val);
+      let errObj: any = {}
+      error.array().forEach((err: any) => {
+        errObj[err.path] = err.msg;
       });
-      if (error.isEmpty() && errArr.length === 0) {
+      if (error.isEmpty()) {
         next();
       } else {
         res.status(400).json({
@@ -57,7 +57,7 @@ export default class Middlewares {
           statusCode: 400,
           message: "Validation failed",
           data: [],
-          errorArray: errArr,
+          errorArray: errObj,
         });
       }
     };

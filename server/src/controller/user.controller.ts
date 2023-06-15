@@ -37,7 +37,7 @@ export default class UserController {
 
   async loginUser(
     req: Request,
-    res: Response<ResponseModel<LoginBodyProps | []>>,
+    res: Response<ResponseModel<LoginBodyProps | [] | string>>,
     next: NextFunction
   ) {
     const { password, username } = req.body as LoginBodyProps;
@@ -70,7 +70,7 @@ export default class UserController {
           statusCode: 200,
           message: "Success",
           token: token,
-          data: [],
+          data: user.fullName,
         });
       }
     }
