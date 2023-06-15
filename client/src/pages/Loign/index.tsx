@@ -3,14 +3,20 @@ import Button from "../../components/Button";
 import Card from "../../components/Card";
 import * as Yup from "yup";
 import TextInput from "../../components/TextInput";
-import { UserModelLogin } from "../../utils/interface";
+import { ResponseModel, UserModelLogin } from "../../utils/interface";
 import { Link } from "react-router-dom";
+import { errorHotToast, successHotToast } from "../../helpers/HotToast";
+import { useState } from "react";
 
 export default function LoginPage(): JSX.Element {
-  const userModel = {
+  // const userModel = {
+    
+  // };
+
+  const [userModel] = useState({
     username: "",
     password: "",
-  };
+  });
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string()
@@ -32,8 +38,12 @@ export default function LoginPage(): JSX.Element {
       body: JSON.stringify(data),
     });
 
-    const result: UserModelLogin = await response.json();
-    console.log(result);
+    const result: ResponseModel<any> = await response.json();
+    if (result.error) {
+      errorHotToast(result.message);
+    } else {
+      successHotToast(`welcome back ${result.data}`);
+    }
   };
 
   return (

@@ -2,20 +2,13 @@ import { Link } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import TextInput from "../../components/TextInput";
-import { UserModel } from "../../utils/interface";
-import { Formik, Form, Field } from "formik";
+import { ResponseModel, UserModel } from "../../utils/interface";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { errorHotToast, successHotToast } from "../../helpers/HotToast";
+import { useState } from "react";
 
 export default function RegisterPage(): JSX.Element {
-  const userModel = {
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-  };
-
   const SignupSchema = Yup.object().shape({
     fullName: Yup.string()
       .min(2, "Too Short!")
@@ -42,6 +35,25 @@ export default function RegisterPage(): JSX.Element {
     ),
   });
 
+  const [userModel] = useState<UserModel>({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const initialValidationErrors = {
+    email: "",
+    username: "",
+    phoneNumber: "",
+  };
+
+  const [validationError, setValidationError] = useState<any>(
+    initialValidationErrors
+  );
+
   const registerUser = async (data: UserModel) => {
     const response = await fetch("http://localhost:3000/user/register", {
       method: "POST",
@@ -51,8 +63,14 @@ export default function RegisterPage(): JSX.Element {
       body: JSON.stringify(data),
     });
 
-    const result: UserModel = await response.json();
-    console.log(result);
+    const result: ResponseModel<UserModel> = await response.json();
+    if (result.error) {
+      errorHotToast(result.message);
+      setValidationError(result.errorArray);
+    } else {
+      successHotToast(`Created user ${result.data.username}`);
+      setValidationError(initialValidationErrors);
+    }
   };
 
   return (
@@ -74,6 +92,7 @@ export default function RegisterPage(): JSX.Element {
           initialValues={userModel}
           validationSchema={SignupSchema}
           onSubmit={(values) => {
+            console.log(values);
             registerUser(values);
           }}
         >
@@ -96,11 +115,16 @@ export default function RegisterPage(): JSX.Element {
                 id="email"
                 name="email"
                 label="Email"
-                error={Boolean(errors.email && touched.email)}
+                error={Boolean(
+                  (errors.email || validationError.email) && touched.email
+                )}
                 errorMessage={
                   errors.email && touched.email ? (
                     <div>{errors.email}</div>
-                  ) : null
+                  ) : (
+                    (validationError.email && validationError.email.message) ??
+                    validationError.email
+                  )
                 }
               />
               <TextInput
@@ -108,11 +132,18 @@ export default function RegisterPage(): JSX.Element {
                 id="phoneNumber"
                 name="phoneNumber"
                 label="Phone Number"
-                error={Boolean(errors.phoneNumber && touched.phoneNumber)}
+                error={Boolean(
+                  (errors.phoneNumber || validationError.phoneNumber) &&
+                    touched.phoneNumber
+                )}
                 errorMessage={
                   errors.phoneNumber && touched.phoneNumber ? (
                     <div>{errors.phoneNumber}</div>
-                  ) : null
+                  ) : (
+                    (validationError.phoneNumber &&
+                      validationError.phoneNumber.message) ??
+                    validationError.phoneNumber
+                  )
                 }
               />
               <TextInput
@@ -120,11 +151,18 @@ export default function RegisterPage(): JSX.Element {
                 id="username"
                 name="username"
                 label="Username"
-                error={Boolean(errors.username && touched.username)}
+                error={Boolean(
+                  (errors.username || validationError.username) &&
+                    touched.username
+                )}
                 errorMessage={
                   errors.username && touched.username ? (
                     <div>{errors.username}</div>
-                  ) : null
+                  ) : (
+                    (validationError.username &&
+                      validationError.username.message) ??
+                    validationError.username
+                  )
                 }
               />
               <TextInput
