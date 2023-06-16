@@ -9,10 +9,6 @@ import { errorHotToast, successHotToast } from "../../helpers/HotToast";
 import { useState } from "react";
 
 export default function LoginPage(): JSX.Element {
-  // const userModel = {
-    
-  // };
-
   const [userModel] = useState({
     username: "",
     password: "",
@@ -45,9 +41,8 @@ export default function LoginPage(): JSX.Element {
       successHotToast(`welcome back ${result.data}`);
     }
   };
-
   return (
-    <div className="container flex justify-between items-center h-screen my-10">
+    <div className="flex justify-center items-center min-h-screen">
       <Card
         title="Login to your acount"
         footerTitle="Don't have an account?"

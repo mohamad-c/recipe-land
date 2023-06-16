@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import RegisterPage from "./pages/Register";
 import LoginPage from "./pages/Loign";
+import { useDarkMode } from "./contexts/DarkModeContext";
+import Switch from "./components/Switch";
 
 function App() {
   const router = createBrowserRouter(
@@ -16,8 +18,14 @@ function App() {
       </Route>
     )
   );
+  const { toggleDarkMode } = useDarkMode();
 
-  return <RouterProvider router={router} />;
+  return (
+    <div className="min-h-screen bg-hero-pattern bg-cover bg-no-repeat bg-gray-100 dark:bg-zinc-800 dark:text-gray-200">
+      <Switch modeChangeHabdler={toggleDarkMode} />
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
 export default App;

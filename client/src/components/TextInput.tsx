@@ -30,6 +30,8 @@ export default function TextInput({
     "px-5",
     "font-Roboto-Condensed",
     "font-medium",
+    "dark: dark:bg-gray-50",
+    "dark: text-black"
   ];
 
   const plainInputClassName = ["border-stone-200", "focus:outline-zinc-400"];
@@ -38,7 +40,7 @@ export default function TextInput({
     <div className="flex flex-col">
       <label
         htmlFor={id}
-        className="flex justify-start font-medium text-zinc-600 text-sm pb-1 font-poppins"
+        className="flex justify-start font-medium text-zinc-600 text-sm pb-1 font-poppins dark:text-gray-300"
       >
         {label}
       </label>
@@ -55,7 +57,7 @@ export default function TextInput({
             : `${inputClassName.join(" ")} ${plainInputClassName.join(" ")}`
         }
       />
-      <p className="text-xs font-Roboto-Condensed mb-3 pt-1 text-rose-800 font-semibold">
+      <p className="text-xs font-Roboto-Condensed mb-3 pt-1 text-rose-800 font-semibold dark:text-rose-600">
         {errorMessage}
       </p>
     </div>
