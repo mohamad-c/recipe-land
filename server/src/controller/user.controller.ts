@@ -40,39 +40,43 @@ export default class UserController {
     res: Response<ResponseModel<LoginBodyProps | [] | string>>,
     next: NextFunction
   ) {
-    const { password, username } = req.body as LoginBodyProps;
-    const user = await userModel.findOne({ username });
-    if (!user) {
-      res.json({
-        error: true,
-        statusCode: 400,
-        message: "Incorrect username or password",
-        data: [],
-      });
-    } else {
-      const isValidUser = encryption.verifyPassword(password, user.password);
-      const token = encryption.createJWT(
-        user.id,
-        user.username,
-        user.email,
-        user.fullName
-      );
-      if (isValidUser === false) {
-        res.json({
+    try {
+      const { password, username } = req.body as LoginBodyProps;
+      const user = await userModel.findOne({ username });
+      if (!user) {
+        res.status(400).json({
           error: true,
           statusCode: 400,
           message: "Incorrect username or password",
           data: [],
         });
       } else {
-        res.json({
-          error: false,
-          statusCode: 200,
-          message: "Success",
-          token: token,
-          data: user.fullName,
-        });
+        const isValidUser = encryption.verifyPassword(password, user.password);
+        const token = encryption.createJWT(
+          user.id,
+          user.username,
+          user.email,
+          user.fullName
+        );
+        if (isValidUser === false) {
+          res.status(400).json({
+            error: true,
+            statusCode: 400,
+            message: "Incorrect username or password",
+            data: [],
+          });
+        } else {
+          res.status(200).json({
+            error: false,
+            statusCode: 200,
+            message: "Success",
+            token: token,
+            data: user.fullName,
+          });
+        }
       }
+    } catch (error) {
+      next(error);
     }
   }
 }

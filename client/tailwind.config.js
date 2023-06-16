@@ -10,8 +10,12 @@ export default {
         'poppins': ['Poppins'],
         'Roboto-Condensed': ['Roboto Condensed'],
         'Arimo': ['Arimo']
+      },
+      backgroundImage:{
+        'hero-pattern': "url('./src/assets/grain.svg')"
       }
     }
   },
   plugins: [],
+  darkMode: 'class',
 };

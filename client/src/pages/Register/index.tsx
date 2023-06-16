@@ -74,7 +74,7 @@ export default function RegisterPage(): JSX.Element {
   };
 
   return (
-    <div className="container flex justify-between items-center h-screen my-10">
+    <div className="min-h-screen flex justify-center items-center">
       <Card
         title="Create an account"
         footerTitle="Already have an account?"
