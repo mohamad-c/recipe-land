@@ -38,7 +38,7 @@ export default class Middlewares {
     };
   }
 
-  registerValidatorResult() {
+  validatorResult() {
     return (
       req: Request,
       res: Response<ResponseModel<any>>,

@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { userModel } from "../model/user.model";
 import { RegisterBodyProps } from "../utils/interfaces";
 
@@ -61,13 +61,15 @@ export default class UserValidation {
   }
   loginValidator() {
     return [
-      body("username")
-        .notEmpty()
-        .withMessage("This field shouldn't be empty"),
-      body("password")
-        .notEmpty()
-        .withMessage("This field shouldn't be empty")
-        
+      body("username").notEmpty().withMessage("This field shouldn't be empty"),
+      body("password").notEmpty().withMessage("This field shouldn't be empty"),
     ];
+  }
+  singleUserById() {
+    return param("id")
+      .notEmpty()
+      .withMessage("This field shouldn't be empty")
+      .isMongoId()
+      .withMessage("Id not valid");
   }
 }

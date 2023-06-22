@@ -3,7 +3,6 @@ import UserValidation from "../validator/user.validator";
 import Middlewares from "../middleware/appMiddlewares";
 import UserController from "../controller/user.controller";
 import EncryptionModule from "../module/encryption.module";
-import { AuthenticatedRequest } from "../utils/interfaces";
 
 const requestValidation = new UserValidation();
 const middlewares = new Middlewares();
@@ -11,8 +10,12 @@ const userController = new UserController();
 const encryption = new EncryptionModule();
 export default class UserRoutes {
   private router = express.Router();
-  routes = [this.someRoute(), this.registerUserRoute(), this.loginUserRoute() ];
-
+  routes = [
+    this.someRoute(),
+    this.registerUserRoute(),
+    this.loginUserRoute(),
+    this.getUserByIdRoute(),
+  ];
 
   private someRoute() {
     return this.router.get(
@@ -32,7 +35,7 @@ export default class UserRoutes {
     return this.router.post(
       "/register",
       requestValidation.registerValidation(),
-      middlewares.registerValidatorResult(),
+      middlewares.validatorResult(),
       userController.registerUser
     );
   }
@@ -41,10 +44,17 @@ export default class UserRoutes {
     return this.router.post(
       "/login",
       requestValidation.loginValidator(),
-      middlewares.registerValidatorResult(),
+      middlewares.validatorResult(),
       userController.loginUser
     );
   }
 
-  
+  private getUserByIdRoute() {
+    return this.router.get(
+      "/:id",
+      requestValidation.singleUserById(),
+      middlewares.validatorResult(),
+      userController.getUserById
+    );
+  }
 }
