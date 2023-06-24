@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -7,6 +7,7 @@ const userSchema = new Schema(
     phoneNumber: { type: String, required: true, unique: true },
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true, trim: true },
+    recepies: [{ type: Types.ObjectId, ref: 'recepies' }]
   },
   { timestamps: true }
 );

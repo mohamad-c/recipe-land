@@ -6,6 +6,7 @@ import {
 } from "../utils/interfaces";
 import { userModel } from "../model/user.model";
 import EncryptionModule from "../module/encryption.module";
+import { ObjectId } from 'mongodb';
 
 const encryption = new EncryptionModule();
 export default class UserController {
@@ -36,7 +37,7 @@ export default class UserController {
   }
 
   async loginUser(
-    req: Request,
+    req: any,
     res: Response<ResponseModel<LoginBodyProps | [] | string>>,
     next: NextFunction
   ) {
@@ -66,6 +67,9 @@ export default class UserController {
             data: [],
           });
         } else {
+          req.user = {
+            id: user.id,
+          };
           res.status(200).json({
             error: false,
             statusCode: 200,
@@ -75,6 +79,27 @@ export default class UserController {
           });
         }
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getUserById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const user = await userModel.aggregate([
+        {
+          $match: { _id: new ObjectId(id) } // Match specific user by ID
+        },
+        {
+          $lookup: {
+            from: "recepies",
+            localField: "_id",
+            foreignField: "creator",
+            as: "recepies"
+          }
+        }
+      ]);
+      res.status(200).send(user);
     } catch (error) {
       next(error);
     }
