@@ -10,7 +10,13 @@ const recepiController = new RecepiController();
 const encryption = new EncryptionModule();
 export default class RecepiRoutes {
   private router = express.Router();
-  routes = [this.createRecepiRoute()];
+  routes = [
+    this.createRecepiRoute(),
+    this.getAllRecepiesRoute(),
+    this.getSingleRecipeRoute(),
+    this.deleteRecipeRoute(),
+    this.updateRecipeRoute()
+  ];
 
   private createRecepiRoute() {
     return this.router.post(
@@ -20,5 +26,35 @@ export default class RecepiRoutes {
       // middlewares.registerValidatorResult(),
       recepiController.createRecepi
     );
+  }
+
+  private getAllRecepiesRoute() {
+    return this.router.get(
+      "/",
+      encryption.checkJWT(),
+      recepiController.getAllRecepies
+    );
+  }
+
+  private getSingleRecipeRoute() {
+    return this.router.get(
+      "/:id",
+      encryption.checkJWT(),
+      recepiController.getRecepieById
+    );
+  }
+  private deleteRecipeRoute(){
+    return this.router.delete(
+      "/:recipeId",
+      encryption.checkJWT(),
+      recepiController.deleteRecepi
+    )
+  }
+  private updateRecipeRoute(){
+    return this.router.put(
+      "/:recipeId",
+      encryption.checkJWT(),
+      recepiController.updateRecepi
+    )
   }
 }
